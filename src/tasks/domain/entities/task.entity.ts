@@ -1,0 +1,26 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from '../users/entities/user.entity';
+
+@Entity('tasks')
+export class Task {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  title: string;
+
+  @Column({ type: 'boolean' })
+  completed: boolean;
+
+  @Column({ type: 'timestamp' })
+  createdAt: Date;
+
+  @Column({ type: 'timestamp' })
+  updatedAt: Date;
+
+  @Column({ type: 'varchar' })
+  userId: string;
+
+  @ManyToOne(() => User, (user) => user.tasks)
+  user: User;
+}
