@@ -45,7 +45,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Role updated successfully' })
   @ApiResponse({ status: 403, description: 'Forbidden' })
   async updateUserRole(
-    @Param('id') userId: string,
+    @Param('id') userId: number,
     @Body() dto: UpdateUserRoleDto,
     @GetCurrentUser() currentUser: AccessTokenPayload,
   ) {

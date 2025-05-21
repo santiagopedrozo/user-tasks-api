@@ -1,12 +1,12 @@
 import { UserRole } from '../../users/entities/user.entity';
 
 export interface AccessTokenPayload {
-  sub: string;
+  sub: number;
   username: string;
   role: UserRole;
 }
 
 export interface RefreshTokenPayload {
-  sub: string;
+  sub: number;
   jti: string;
 }

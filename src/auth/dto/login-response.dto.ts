@@ -8,8 +8,8 @@ export class LoginResponseDto {
   access_token: string;
 
   @ApiProperty({
-    description: 'authed user uuid',
-    example: '107f3f92-7d63-498e-8239-49379b6f4d71',
+    description: 'authed user id',
+    example: '1',
   })
-  userId: string;
+  userId: number;
 }

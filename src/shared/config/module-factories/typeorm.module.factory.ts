@@ -2,26 +2,14 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm/dist/interfaces/typeorm-op
 import { ConfigService } from '@nestjs/config';
 
 import { LoggerForTypeORM } from '../../logger/typeorm.logger';
-import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import { connectionOptions } from '../typeorm/connection-options';
 
 export const getTypeOrmModuleFactory = async (
   configService: ConfigService,
 ): Promise<TypeOrmModuleOptions> => {
-  const isCompiled = __dirname.includes('dist');
-
-  const base: PostgresConnectionOptions = {
-    type: 'postgres',
-    host: process.env.DB_HOST,
-    port: parseInt(process.env.DB_PORT || '5432', 10),
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE,
-    entities: [isCompiled ? 'dist/**/*.entity.js' : 'src/**/*.entity.ts'],
-    migrations: [isCompiled ? 'dist/migrations/*.js' : 'src/migrations/*.ts'],
-  };
 
   return {
-    ...base,
+    ...connectionOptions,
     autoLoadEntities: true,
     cache: {
       type: 'ioredis',

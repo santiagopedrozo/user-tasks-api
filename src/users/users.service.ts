@@ -6,7 +6,7 @@ import { UserNotFoundException } from './errors/user-not-found.exception';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserAlreadyExistsException } from './errors/user-already-exists.exception';
 import { UserAuth } from './entities/user_auth.entity';
-import { RequestingUser, TasksService } from '../tasks/service/tasks.service';
+import { RequestingUser, TasksService } from '../tasks/services/tasks.service';
 import { ForbiddenUserRoleUpdateException } from './errors/forbidden-user-role-update.exception';
 import { ForbiddenUserRoleDeleteException } from './errors/forbidden-user-role-delete.exception';
 
@@ -23,7 +23,7 @@ export class UsersService {
     where: FindOptionsWhere<User>,
     relations?: string[],
   ): Promise<User | null> {
-    return await this.usersRepo.findOne({ where, relations });
+    return await this.usersRepo.findOne({ where, relations } );
   }
 
   async findAll(
@@ -34,7 +34,7 @@ export class UsersService {
   }
 
   async updateRefreshToken(
-    userId: string,
+    userId: number,
     refreshToken: string,
     refreshTokenJti: string,
   ): Promise<void> {
@@ -66,7 +66,7 @@ export class UsersService {
   }
 
   async deleteUser(
-    userId: string,
+    userId: number,
     requestingUser: RequestingUser,
   ): Promise<void> {
     if (requestingUser.role === UserRole.USER && requestingUser.id !== userId) {
@@ -91,7 +91,7 @@ export class UsersService {
 
   async updateUserRole(
     adminUser: RequestingUser,
-    userId: string,
+    userId: number,
     newRole: UserRole,
   ): Promise<User> {
     if (adminUser.role !== UserRole.ADMIN) {
@@ -105,7 +105,7 @@ export class UsersService {
     return await this.usersRepo.save(user);
   }
 
-  async userExists(userId: string): Promise<boolean> {
+  async userExists(userId: number): Promise<boolean> {
     const count = await this.usersRepo.count({ where: { id: userId } });
 
     if(count == 0){
