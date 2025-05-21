@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Task } from '../../domain/entities/task.entity';
+import { Task } from '../entities/task.entity';
 
 export class TaskResponseDto {
   @ApiProperty({
@@ -21,10 +21,10 @@ export class TaskResponseDto {
   completed: boolean;
 
   @ApiProperty({
-    description: 'UUID of the user who owns the task',
-    example: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    description: 'ID of the user who owns the task',
+    example: '3',
   })
-  userId: string;
+  userId: number;
 
   @ApiProperty({
     description: 'Timestamp when the task was created',
@@ -42,7 +42,7 @@ export class TaskResponseDto {
     this.id = task.id;
     this.title = task.title;
     this.completed = task.completed;
-    this.userId = task.userId;
+    this.userId = task.assignedUserId;
     this.createdAt = task.createdAt;
     this.updatedAt = task.updatedAt;
   }

@@ -1,15 +1,25 @@
 import { Module } from '@nestjs/common';
-import { TasksService } from './service/tasks.service';
+import { TasksService } from './services/tasks.service';
 import { TasksController } from './tasks.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Task } from './task.entity';
-import { ExternalTaskApiModule } from '../external-task-api/external-task-api.module';
+import { Task } from './entities/task.entity';
 import { UsersModule } from '../users/users.module';
+import { HttpModule } from '@nestjs/axios';
+import { TypicodeTaskClient } from './clients/typicode-task-client';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ITaskClientName } from './clients/task-client.interface';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   controllers: [TasksController],
-  providers: [TasksService],
-  imports: [TypeOrmModule.forFeature([Task]), ExternalTaskApiModule, UsersModule],
+  providers: [
+    TasksService,
+    {
+      provide: ITaskClientName,
+      useClass: TypicodeTaskClient,
+    },
+  ],
+  imports: [ConfigModule, UsersModule, HttpModule, TypeOrmModule.forFeature([Task]), EventEmitterModule.forRoot()],
   exports: [TasksService]
 })
 export class TasksModule {}

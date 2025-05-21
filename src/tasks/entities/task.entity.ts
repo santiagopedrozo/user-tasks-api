@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { User } from '../users/entities/user.entity';
+import { User, UserRole } from '../../users/entities/user.entity';
 
 @Entity('tasks')
 export class Task {
@@ -18,9 +18,16 @@ export class Task {
   @Column({ type: 'timestamp' })
   updatedAt: Date;
 
-  @Column({ type: 'varchar' })
-  userId: string;
+  @Column({ type: 'integer' })
+  assignedUserId: number;
 
-  @ManyToOne(() => User, (user) => user.tasks)
-  user: User;
+  @ManyToOne(() => User, (user) => user.assignedTasks)
+  assignedUser: User;
+
+  @Column({ type: 'integer' })
+  createdByUserId: number;
+
+  @ManyToOne(() => User, (user) => user.createdTasks)
+  createdByUser: User;
+
 }

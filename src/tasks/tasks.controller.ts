@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { TasksService } from './service/tasks.service';
+import { TasksService } from './services/tasks.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateTaskDto } from './dtos/create-task.dto';
 import { UpdateTaskDto } from './dtos/update-task.dto';
@@ -32,17 +32,37 @@ import { DeleteTaskDto } from './dtos/delete-task.dto';
 import { RolesGuard } from '../shared/guards/roles.guard';
 import { Roles } from '../shared/decorators/roles.decorator';
 import { UserRole } from '../users/entities/user.entity';
-import { ExternalTaskApiService } from './service/external-task-api.service';
+import { SyncTasksResponseDto } from './dtos/sync-tasks-response.dto';
 
 @ApiTags('Tasks')
 @Controller('tasks')
-//@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard)
 export class TasksController {
   constructor(
-    private readonly tasksService: TasksService,
-    private readonly externalTaskApiService: ExternalTaskApiService
+    private readonly tasksService: TasksService
   ) {}
-/*
+
+  @Patch('sync-external')
+  @UseGuards(RolesGuard)
+  @Roles(UserRole.ADMIN)
+
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Sync all external tasks to users (admin only)',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Tasks successfully updated',
+    type: SyncTasksResponseDto,
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden',
+  })
+  async populateTasks() {
+    return this.tasksService.syncExternalTasks();
+  }
+
   // Routing
   @Post()
 
@@ -94,7 +114,7 @@ export class TasksController {
     type: PaginatedResponseDto,
   })
   async getTasks(
-    @GetCurrentUser('sub') userId: string,
+    @GetCurrentUser('sub') userId: number,
     @Query() pagination: PaginationQueryDto,
   ) {
     const { data, total } = await this.tasksService.getUserTasks(
@@ -127,7 +147,7 @@ export class TasksController {
   })
   async getTaskById(
     @Param('id') id: string,
-    @GetCurrentUser('sub') userId: string,
+    @GetCurrentUser('sub') userId: number,
   ) {
     const foundTask = await this.tasksService.findUserTaskByIdOrFail(
       id,
@@ -137,7 +157,7 @@ export class TasksController {
   }
 
   // Routing
-  @Patch(':id')
+  @Patch('/:id')
 
   // Swagger Documentation
   @ApiBearerAuth()
@@ -190,13 +210,5 @@ export class TasksController {
       id: userFromPayload.sub,
       role: userFromPayload.role,
     });
-  }
-
- */
-
-  // Routing
-  @Get('test')
-  async populateTasks() {
-    return this.externalTaskApiService.findAll();
   }
 }

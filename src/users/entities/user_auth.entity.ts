@@ -15,8 +15,8 @@ export class UserAuth {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar' })
-  userId: string;
+  @Column({ type: 'number' })
+  userId: number;
 
   @OneToOne(() => User)
   @JoinColumn()

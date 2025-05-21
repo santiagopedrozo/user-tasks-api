@@ -37,7 +37,6 @@ services:
         condition: service_healthy
     environment:
       PORT: 3000
-      NODE_ENV: test
       PROVIDER: LOCAL
       JWT_ACCESS_SECRET: ACCESS_SECRET
       JWT_ACCESS_EXPIRES_IN: 15m
@@ -49,6 +48,6 @@ services:
       DB_PASSWORD: postgres
       DB_DATABASE: users_task_test
       REDIS_URL: redis://redis:6379
-      REDIS_DEFAULT_TTL: 1000
       ENV: TEST
+      CACHE_TTL_MS: 300000
     command: sh -c "npm run migration:run && npm run test:cov"

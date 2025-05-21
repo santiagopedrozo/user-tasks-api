@@ -26,7 +26,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     req: Request,
     payload: AccessTokenPayload,
   ): {
-    sub: string;
+    sub: number;
     username: string;
     role: string;
     refreshToken: any;

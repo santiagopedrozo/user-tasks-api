@@ -30,12 +30,11 @@ export class CreateTaskDto {
   description: string;
 
   @ApiProperty({
-    description: 'UUID of the user who owns the task',
-    example: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+    description: 'ID of the user who owns the task',
+    example: '3',
   })
-  @IsUUID()
   @IsNotEmpty()
-  userId: string;
+  userId: number;
 
   @ApiPropertyOptional({
     description: 'Indicates if the task is completed',

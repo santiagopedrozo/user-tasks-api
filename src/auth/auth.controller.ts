@@ -100,7 +100,7 @@ export class AuthController {
     description: 'Refresh token is missing or invalid',
   })
   async refresh(
-    @GetCurrentUser('sub') userId: string,
+    @GetCurrentUser('sub') userId: number,
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ): Promise<LoginResponseDto> {

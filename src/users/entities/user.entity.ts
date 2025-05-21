@@ -7,7 +7,7 @@ import {
   BeforeUpdate,
   OneToOne,
 } from 'typeorm';
-import { Task } from '../../tasks/task.entity';
+import { Task } from '../../tasks/entities/task.entity';
 import * as bcrypt from 'bcrypt';
 import { UserAuth } from './user_auth.entity';
 
@@ -18,8 +18,8 @@ export enum UserRole {
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column({
     name: 'username',
@@ -44,8 +44,11 @@ export class User {
   })
   role: UserRole;
 
-  @OneToMany(() => Task, (task) => task.user)
-  tasks: Task[];
+  @OneToMany(() => Task, (task) => task.assignedUserId)
+  assignedTasks: Task[];
+
+  @OneToMany(() => Task, (task) => task.createdByUserId)
+  createdTasks: Task[];
 
   @OneToOne(() => UserAuth, (auth) => auth.user, { cascade: true })
   auth: UserAuth;
