@@ -1,99 +1,92 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# User tasks challenge
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+#### Things that can be done to improve:
+1. All the unit and integration test are skipped and must be resolved in the future, the critics endpoints of business logic are covered with e2e
+2. The E2E test suitcase takes so long-running on the dockerized environment, in a host environment is the whole exec is less than 10 seconds but in the docker vm it comes up to 2 minutes. Maybe the best thing is try for another test library like mocha
+3. The redis implementation is only used to satisfy the sql queries cache, the implementation should be abstracted to another layer to make it easier to use if any new features needs redis as well
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Decisions taken
 
-## Description
+- Service, Repository and client were created to split business logic from storage (Even when the storage is another API)
+- Added an extra abstract layer to Client of external tasks to change easily the API if needed.
+- Used clean architecture by splitting outside communication from app domain. And the app domains is splitted into controller, service, repository and client. This makes the application easy to extend and modify without having to affect further functionalities.
+- All the domain errors are mapped by a http error mapper to avoid http implementations on the service, also implemented a global exception filter to avoid unhandled rejects
+- Used logger pino to normalize all logging implementation
+- JWT-Based Authentication (Access + Refresh Tokens). More info on `jwt-auth-readme`.
+- Selected endpoints implements cache with redis
+- Added a layer to the postgres connection to implement the migration configurations.
+- The rate limit security is based on the nest throttler module
+- The basic API doc is covered with swagger to give a nice approach to the whole App
+- E2E tests were prioritized due lack of time, the selected endpoints to test represents the core business logic 
+- Env vars were handled with `config` library.
+- Docker was used to make the app more reproducible and easier to deploy in cloud providers.
+- Nest was chosen because it has a very nice approach to apply clean architecture out of the box by fostering dependency inversion principle with modules.
+- Typescript was used because static type checks help a lot by preventing some bugs.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Badges
 
-## Project setup
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/DVoiAwDzmMcvshPZnm3jCP/ASAErrsAbrCMQahxbmgeyR/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/DVoiAwDzmMcvshPZnm3jCP/ASAErrsAbrCMQahxbmgeyR/tree/master)
+[![Coverage Status](https://coveralls.io/repos/github/yaritaft/cosmos-challenge/badge.png?branch=master)](https://coveralls.io/github/yaritaft/cosmos-challenge?branch=master)
 
-```bash
-$ npm install
+### Features
+
+- [] Register a new `user`, then login and start adding tasks.
+- [] A regular user can access a crud of their own tasks.
+- [] With an admin user the external tasks can be synced if found tasks for existing users.
+- [] Also, with an admin user can create, update, delete tasks of another user.
+
+## Table of contents
+
+- [Technology](#Technology)
+- [Routes](#Routes)
+- [PreRequisites](#Pre-requisites)
+- [Run APP](#Run-APP)
+- [Run tests](#Run-tests)
+
+
+
+## Technology
+
+- Programming languaje: Typesscript
+- APP Framework: Nest JS
+- Containers: Docker, Docker-compose
+- Deployment: Coveralls and Travis
+
+## Routes
+
+- API swagger: http://localhost:3000/api#/
+- 
+## Pre-requisites
+
+- Docker and docker compose installed.
+- Linux/Mac terminal (Or emulated linux on Windows)
+- No services running on localhost port 3000.
+
+### Run APP with Docker
+
+1. Execute script to run the app.
+
+```
+chmod 777 ./up_dev.sh
+./up_dev.sh
 ```
 
-## Compile and run the project
+2. Go to the swagger http://localhost:3000/api and test the app or consume api through curl or postman with default api key: `defaultApiKey`
 
-```bash
-# development
-$ npm run start
+3. Press Control + C to stop the app.
 
-# watch mode
-$ npm run start:dev
+### Run tests with Docker
 
-# production mode
-$ npm run start:prod
+Being at the same point before last step type:
+
+```
+chmod 777 ./up_test.sh
+./up_test.sh
 ```
 
-## Run tests
+### Author
 
-```bash
-# unit tests
-$ npm run test
+Santiago Pedrozo
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- GitHub: https://github.com/santiagopedrozo
+- LinkedIn: https://www.linkedin.com/feed/

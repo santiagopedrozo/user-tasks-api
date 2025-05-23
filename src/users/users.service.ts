@@ -6,7 +6,7 @@ import { UserNotFoundException } from './errors/user-not-found.exception';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserAlreadyExistsException } from './errors/user-already-exists.exception';
 import { UserAuth } from './entities/user_auth.entity';
-import { RequestingUser, TasksService } from '../tasks/services/tasks.service';
+import { RequestingUser, TasksService } from '../tasks/tasks.service';
 import { ForbiddenUserRoleUpdateException } from './errors/forbidden-user-role-update.exception';
 import { ForbiddenUserRoleDeleteException } from './errors/forbidden-user-role-delete.exception';
 

@@ -12,7 +12,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { LoggerModule } from 'nestjs-pino';
 import { loggerModuleFactory } from './shared/config/module-factories/logger.factory';
 import { APP_GUARD } from '@nestjs/core';
-import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -41,7 +40,6 @@ import { HealthModule } from './health/health.module';
     TasksModule,
     AuthModule,
     JwtModule,
-    HealthModule
   ],
   providers: [
     {
