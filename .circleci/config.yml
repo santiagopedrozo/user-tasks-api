@@ -22,7 +22,7 @@ jobs:
             - .
 
 workflows:
-  test_my_app:
+  build-and-test:
     jobs:
       - build_and_test
       - filters:
