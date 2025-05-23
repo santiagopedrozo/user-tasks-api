@@ -20,11 +20,7 @@ jobs:
           root: ~/project
           paths:
             - .
-
 workflows:
-  build-and-test:
+  test_my_app:
     jobs:
       - build_and_test
-      - filters:
-          branches:
-            only: main
