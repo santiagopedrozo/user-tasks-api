@@ -19,7 +19,13 @@ import { ConfigModule } from '@nestjs/config';
       useClass: TypicodeTaskClient,
     },
   ],
-  imports: [ConfigModule, UsersModule, HttpModule, TypeOrmModule.forFeature([Task]), EventEmitterModule.forRoot()],
-  exports: [TasksService]
+  imports: [
+    ConfigModule,
+    UsersModule,
+    HttpModule,
+    TypeOrmModule.forFeature([Task]),
+    EventEmitterModule.forRoot(),
+  ],
+  exports: [TasksService],
 })
 export class TasksModule {}

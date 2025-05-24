@@ -1,8 +1,8 @@
-# This config was automatically generated from your source code
-# Stacks detected: deps:node:.,test:jest:
 version: 2.1
 orbs:
-  node: circleci/node@5
+  node: circleci/node@5.0.2
+  heroku: circleci/heroku@1.2.6
+
 jobs:
   build_and_test:
     executor: node/default
@@ -11,7 +11,7 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
-          command: npm run test:cov
+          command: npm run test
           name: Run tests
       - run:
           command: npm run build
@@ -20,7 +20,11 @@ jobs:
           root: ~/project
           paths:
             - .
+
 workflows:
   test_my_app:
     jobs:
       - build_and_test
+      #- run-linters #on push
+      #- build #on push
+      #- e2e-test #after pr main

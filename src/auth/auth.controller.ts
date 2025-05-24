@@ -34,7 +34,7 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private configService: ConfigService,
-    private usersService: UsersService
+    private usersService: UsersService,
   ) {}
 
   // Routing
@@ -74,7 +74,10 @@ export class AuthController {
       path: '/auth/refresh',
     });
 
-    return { access_token: loginResponse.tokens.access_token, userId: loginResponse.userId  };
+    return {
+      access_token: loginResponse.tokens.access_token,
+      userId: loginResponse.userId,
+    };
   }
 
   // Routing
@@ -109,7 +112,10 @@ export class AuthController {
       throw new ForbiddenException('Refresh token cookie missing');
     }
 
-    const refreshResponse = await this.authService.refreshTokens(userId, refreshToken);
+    const refreshResponse = await this.authService.refreshTokens(
+      userId,
+      refreshToken,
+    );
 
     response.cookie('refresh_token', refreshResponse.tokens.refresh_token, {
       httpOnly: true,
@@ -118,7 +124,10 @@ export class AuthController {
       path: '/auth/refresh',
     });
 
-    return { access_token: refreshResponse.tokens.access_token, userId: refreshResponse.userId };
+    return {
+      access_token: refreshResponse.tokens.access_token,
+      userId: refreshResponse.userId,
+    };
   }
 
   // Routing
@@ -129,8 +138,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Create a new User' })
   @ApiResponse({
     status: 200,
-    description:
-      'returns the created user data',
+    description: 'returns the created user data',
     type: GetUserDto,
   })
   @ApiResponse({

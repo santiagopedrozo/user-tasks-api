@@ -1,7 +1,4 @@
-import {
-  Inject,
-  Injectable, Logger,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Task } from './entities/task.entity';
@@ -84,7 +81,7 @@ export class TasksService {
       order: {
         createdAt: 'DESC',
       },
-      cache: this.configService.get<number>('CACHE_TTL_MS') || 300000
+      cache: this.configService.get<number>('CACHE_TTL_MS') || 300000,
     });
 
     return {
@@ -111,15 +108,16 @@ export class TasksService {
   }
 
   async syncExternalTasks(): Promise<SyncTasksResponseDto> {
-    const externalTasks= await this.getExternalTasks();
+    const externalTasks = await this.getExternalTasks();
 
     //move to batches to increase performance
     let syncedTasks = 0;
     for (const externalTask of externalTasks) {
+      const userExists = await this.userService.findOne({
+        id: externalTask.userId,
+      });
 
-      const userExists = await this.userService.findOne({ id: externalTask.userId });
-
-      if(userExists){
+      if (userExists) {
         const taskExists = await this.tasksRepo.findOne({
           where: {
             title: externalTask.title,

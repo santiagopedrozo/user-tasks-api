@@ -35,7 +35,9 @@ describe('Users E2E - Full Test Suite', () => {
   afterEach(async () => {
     await dataSource.query(`TRUNCATE TABLE "tasks" RESTART IDENTITY CASCADE`);
     await dataSource.query(`TRUNCATE TABLE "users" RESTART IDENTITY CASCADE`);
-    await dataSource.query(`TRUNCATE TABLE "user_auth" RESTART IDENTITY CASCADE`);
+    await dataSource.query(
+      `TRUNCATE TABLE "user_auth" RESTART IDENTITY CASCADE`,
+    );
   });
 
   afterAll(async () => {
@@ -46,13 +48,13 @@ describe('Users E2E - Full Test Suite', () => {
     it('should update user role by admin', async () => {
       const adminResult = await request(app.getHttpServer())
         .post('/auth/register')
-        .send({username: 'admin', password: 'password'});
+        .send({ username: 'admin', password: 'password' });
 
       expect(adminResult.status).toBe(201);
 
       const userResult = await request(app.getHttpServer())
         .post('/auth/register')
-        .send({username: 'user', password: 'password'});
+        .send({ username: 'user', password: 'password' });
 
       expect(userResult.status).toBe(201);
 
@@ -75,13 +77,13 @@ describe('Users E2E - Full Test Suite', () => {
     it('should return 403 if non-admin tries to update role', async () => {
       const adminResult = await request(app.getHttpServer())
         .post('/auth/register')
-        .send({username: 'admin', password: 'password'});
+        .send({ username: 'admin', password: 'password' });
 
       expect(adminResult.status).toBe(201);
 
       const userResult = await request(app.getHttpServer())
         .post('/auth/register')
-        .send({username: 'user', password: 'password'});
+        .send({ username: 'user', password: 'password' });
 
       expect(userResult.status).toBe(201);
 

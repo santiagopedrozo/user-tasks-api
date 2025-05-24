@@ -16,14 +16,14 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepo: Repository<User>,
     @InjectRepository(UserAuth)
-    private userAuthRepo: Repository<UserAuth>
+    private userAuthRepo: Repository<UserAuth>,
   ) {}
 
   async findOne(
     where: FindOptionsWhere<User>,
     relations?: string[],
   ): Promise<User | null> {
-    return await this.usersRepo.findOne({ where, relations } );
+    return await this.usersRepo.findOne({ where, relations });
   }
 
   async findAll(
@@ -60,7 +60,7 @@ export class UsersService {
     const user = this.usersRepo.create({
       username: dto.username,
       password: dto.password,
-      role: foundUsers.length == 0 ? UserRole.ADMIN : UserRole.USER
+      role: foundUsers.length == 0 ? UserRole.ADMIN : UserRole.USER,
     });
     return await this.usersRepo.save(user);
   }
@@ -74,7 +74,7 @@ export class UsersService {
     }
 
     const user = await this.usersRepo.findOne({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     if (!user) {
@@ -108,8 +108,8 @@ export class UsersService {
   async userExists(userId: number): Promise<boolean> {
     const count = await this.usersRepo.count({ where: { id: userId } });
 
-    if(count == 0){
-      throw new UserNotFoundException()
+    if (count == 0) {
+      throw new UserNotFoundException();
     }
 
     return true;

@@ -38,14 +38,11 @@ import { SyncTasksResponseDto } from './dtos/sync-tasks-response.dto';
 @Controller('tasks')
 @UseGuards(JwtAuthGuard)
 export class TasksController {
-  constructor(
-    private readonly tasksService: TasksService
-  ) {}
+  constructor(private readonly tasksService: TasksService) {}
 
   @Patch('sync-external')
   @UseGuards(RolesGuard)
   @Roles(UserRole.ADMIN)
-
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Sync all external tasks to users (admin only)',
@@ -193,7 +190,7 @@ export class TasksController {
   // Swagger Documentation
   @ApiBearerAuth()
   @ApiBody({
-    type: DeleteTaskDto
+    type: DeleteTaskDto,
   })
   @ApiOperation({ summary: 'Delete a task by ID' })
   @ApiParam({ name: 'id', description: 'Task ID to delete' })
@@ -204,7 +201,7 @@ export class TasksController {
   async deleteTask(
     @Param('id') id: string,
     @GetCurrentUser() userFromPayload: AccessTokenPayload,
-    @Body() dto: DeleteTaskDto
+    @Body() dto: DeleteTaskDto,
   ): Promise<boolean> {
     return await this.tasksService.deleteTask(id, dto.userId, {
       id: userFromPayload.sub,

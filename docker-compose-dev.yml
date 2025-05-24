@@ -48,6 +48,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_DATABASE: users_task
+      REDIS_ENABLED: true
       REDIS_URL: redis://redis:6379
       REDIS_DEFAULT_TTL: 60000
       ENV: DEV

@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class SyncTasksResponseDto{
+export class SyncTasksResponseDto {
   @ApiProperty({
     description: 'Fetched tasks from external API',
     example: '200',

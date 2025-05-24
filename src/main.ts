@@ -26,7 +26,7 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') ?? 3000;
-  const enableSwagger = configService.get<boolean>('ENABLE_SWAGGER') ?? true;
+  const enableSwagger = configService.get<string>('ENABLE_SWAGGER') === 'true';
 
   app.enableCors(corsFactory(configService));
 

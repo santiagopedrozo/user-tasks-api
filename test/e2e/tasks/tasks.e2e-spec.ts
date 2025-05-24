@@ -13,7 +13,7 @@ describe('Tasks E2E - Full Test Suite', () => {
   let authedAdminUserBody;
   let authedNonAdminUserBody;
 
-  async function setupUsers (app: INestApplication) {
+  async function setupUsers(app: INestApplication) {
     await request(app.getHttpServer())
       .post('/auth/register')
       .send({ username: 'admin', password: 'password' });
@@ -22,7 +22,7 @@ describe('Tasks E2E - Full Test Suite', () => {
       .post('/auth/login')
       .send({ username: 'admin', password: 'password' });
 
-    authedAdminUserBody = adminLogin.body
+    authedAdminUserBody = adminLogin.body;
 
     await request(app.getHttpServer())
       .post('/auth/register')
@@ -32,16 +32,18 @@ describe('Tasks E2E - Full Test Suite', () => {
       .post('/auth/login')
       .send({ username: 'user', password: 'password' });
 
-    authedNonAdminUserBody = nonAdminLogin.body
+    authedNonAdminUserBody = nonAdminLogin.body;
   }
 
-  async function deleteUsers () {
+  async function deleteUsers() {
     const queryRunner = dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.query(`TRUNCATE TABLE "user_auth", "users" RESTART IDENTITY CASCADE`);
+      await queryRunner.query(
+        `TRUNCATE TABLE "user_auth", "users" RESTART IDENTITY CASCADE`,
+      );
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -72,7 +74,7 @@ describe('Tasks E2E - Full Test Suite', () => {
 
     await app.init();
 
-    await setupUsers(app)
+    await setupUsers(app);
   });
 
   afterEach(async () => {
@@ -81,7 +83,9 @@ describe('Tasks E2E - Full Test Suite', () => {
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.query(`TRUNCATE TABLE "tasks" RESTART IDENTITY CASCADE`);
+      await queryRunner.query(
+        `TRUNCATE TABLE "tasks" RESTART IDENTITY CASCADE`,
+      );
 
       await queryRunner.commitTransaction();
     } catch (err) {
@@ -90,11 +94,10 @@ describe('Tasks E2E - Full Test Suite', () => {
     } finally {
       await queryRunner.release();
     }
-
   });
 
   afterAll(async () => {
-    await deleteUsers()
+    await deleteUsers();
     await app.close();
   });
 
@@ -103,8 +106,11 @@ describe('Tasks E2E - Full Test Suite', () => {
       const res = await request(app.getHttpServer())
         .post('/tasks')
         .set('Authorization', `Bearer ${authedAdminUserBody.access_token}`)
-        .send({ title: 'Admin Task', description: 'Task by admin', userId: authedNonAdminUserBody.userId });
-
+        .send({
+          title: 'Admin Task',
+          description: 'Task by admin',
+          userId: authedNonAdminUserBody.userId,
+        });
 
       expect(res.status).toBe(201);
       expect(res.body).toHaveProperty('id');
@@ -114,12 +120,15 @@ describe('Tasks E2E - Full Test Suite', () => {
       const res = await request(app.getHttpServer())
         .post('/tasks')
         .set('Authorization', `Bearer ${authedNonAdminUserBody.access_token}`)
-        .send({ title: 'Admin Task', description: 'Task by admin', userId: authedAdminUserBody.userId });
-
+        .send({
+          title: 'Admin Task',
+          description: 'Task by admin',
+          userId: authedAdminUserBody.userId,
+        });
 
       expect(res.status).toBe(403);
     });
-  })
+  });
 
   describe('PATCH /tasks', () => {
     it('admin should delete task for another user', async () => {
@@ -128,7 +137,11 @@ describe('Tasks E2E - Full Test Suite', () => {
       const taskRes = await request(app.getHttpServer())
         .post('/tasks')
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({ title: 'Admin Task', description: 'Task to be deleted', userId: authedNonAdminUserBody.userId });
+        .send({
+          title: 'Admin Task',
+          description: 'Task to be deleted',
+          userId: authedNonAdminUserBody.userId,
+        });
 
       const taskId = taskRes.body.id;
 
@@ -145,7 +158,11 @@ describe('Tasks E2E - Full Test Suite', () => {
       const taskRes = await request(app.getHttpServer())
         .post('/tasks')
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({ title: 'Admin Task', description: 'Task to be deleted', userId: authedNonAdminUserBody.userId });
+        .send({
+          title: 'Admin Task',
+          description: 'Task to be deleted',
+          userId: authedNonAdminUserBody.userId,
+        });
 
       const taskId = taskRes.body.id;
 
@@ -155,7 +172,7 @@ describe('Tasks E2E - Full Test Suite', () => {
 
       expect(deleteRes.status).toBe(403);
     });
-  })
+  });
 
   describe('DELETE /tasks', () => {
     it('admin should delete task for another user', async () => {
@@ -164,7 +181,11 @@ describe('Tasks E2E - Full Test Suite', () => {
       const taskRes = await request(app.getHttpServer())
         .post('/tasks')
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({ title: 'Task to Update', description: 'Update this task', userId: authedNonAdminUserBody.userId });
+        .send({
+          title: 'Task to Update',
+          description: 'Update this task',
+          userId: authedNonAdminUserBody.userId,
+        });
 
       const taskId = taskRes.body.id;
 
@@ -182,7 +203,11 @@ describe('Tasks E2E - Full Test Suite', () => {
       const taskRes = await request(app.getHttpServer())
         .post('/tasks')
         .set('Authorization', `Bearer ${adminToken}`)
-        .send({ title: 'Task to Update', description: 'Update this task', userId: authedNonAdminUserBody.userId });
+        .send({
+          title: 'Task to Update',
+          description: 'Update this task',
+          userId: authedNonAdminUserBody.userId,
+        });
 
       const taskId = taskRes.body.id;
 
@@ -193,9 +218,5 @@ describe('Tasks E2E - Full Test Suite', () => {
 
       expect(deleteRes.status).toBe(403);
     });
-  })
+  });
 });
-
-
-
-

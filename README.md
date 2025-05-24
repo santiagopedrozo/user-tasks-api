@@ -2,8 +2,8 @@
 
 #### Things that can be done to improve:
 1. All the unit and integration test are skipped and must be resolved in the future, the critics endpoints of business logic are covered with e2e
-2. The E2E test suitcase takes so long-running on the dockerized environment, in a host environment is the whole exec is less than 10 seconds but in the docker vm it comes up to 2 minutes. Maybe the best thing is try for another test library like mocha
-3. The redis implementation is only used to satisfy the sql queries cache, the implementation should be abstracted to another layer to make it easier to use if any new features needs redis as well
+2. The redis implementation is only used to satisfy the sql queries cache, the implementation should be abstracted to another layer to make it easier to use if any new features needs redis as well
+3. The sync implementation for the tasks API is optimized for low-volume operations (e.g., around 2,000 records). For larger datasets, this solution is not well-suited, and more robust strategies such as batching or connection pooling will be necessary
 
 ### Decisions taken
 

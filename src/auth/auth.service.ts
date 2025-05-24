@@ -19,7 +19,10 @@ export class AuthService {
     private usersService: UsersService,
   ) {}
 
-  async login(userName: string, password: string): Promise<{ tokens: jwtTokens, userId: number  }> {
+  async login(
+    userName: string,
+    password: string,
+  ): Promise<{ tokens: jwtTokens; userId: number }> {
     const user = await this.usersService.findOne({ username: userName });
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -28,14 +31,14 @@ export class AuthService {
 
     return {
       tokens: await this.generateAndStoreTokens(user),
-      userId: user.id
+      userId: user.id,
     };
   }
 
   async refreshTokens(
     userId: number,
     refreshToken: string,
-  ): Promise<{ tokens: jwtTokens, userId: number  }> {
+  ): Promise<{ tokens: jwtTokens; userId: number }> {
     const user = await this.usersService.findOne({ id: userId }, ['auth']);
 
     if (!user || !user.auth.hashedRefreshToken || !user.auth.refreshTokenJti) {
@@ -57,7 +60,7 @@ export class AuthService {
 
     return {
       tokens: await this.generateAndStoreTokens(user),
-      userId: user.id
+      userId: user.id,
     };
   }
 

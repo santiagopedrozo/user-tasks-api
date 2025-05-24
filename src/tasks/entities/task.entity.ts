@@ -29,5 +29,4 @@ export class Task {
 
   @ManyToOne(() => User, (user) => user.createdTasks)
   createdByUser: User;
-
 }
