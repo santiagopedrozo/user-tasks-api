@@ -4,27 +4,56 @@ orbs:
   heroku: circleci/heroku@1.2.6
 
 jobs:
-  build_and_test:
-    executor: node/default
+  e2e_tests:
+    docker:
+      - image: cimg/node:20  # o la versión que uses
+      - image: postgres:15
+        name: db
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: users_task_test
+    environment:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_DATABASE: users_task_test
+      ENV: TEST
+      REDIS_ENABLED: false
+      ENABLE_SWAGGER: false
+      JWT_ACCESS_SECRET: ACCESS_SECRET
+      JWT_REFRESH_SECRET: REFRESH_SECRET
+      JWT_ACCESS_EXPIRES_IN: 15m
+      JWT_REFRESH_EXPIRES_IN: 1s
     steps:
       - checkout
+
       - node/install-packages:
           pkg-manager: npm
+
       - run:
-          command: npm run test
-          name: Run tests
+          name: Wait for Postgres to be ready
+          command: |
+            for i in `seq 1 10`; do
+              nc -z 127.0.0.1 5432 && echo "Postgres is up" && exit 0
+              echo "Waiting for postgres..."
+              sleep 3
+            done
+            echo "Postgres did not start in time" && exit 1
+
       - run:
-          command: npm run build
-          name: Build app
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
+          name: Run DB Migrations
+          command: npm run migration:run
+
+      - run:
+          name: Run E2E tests
+          command: npm run test:e2e
 
 workflows:
   test_my_app:
     jobs:
-      - build_and_test
+      - e2e_tests
       #- run-linters #on push
       #- build #on push
       #- e2e-test #after pr main
