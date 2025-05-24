@@ -6,7 +6,7 @@ orbs:
 jobs:
   e2e_tests:
     docker:
-      - image: cimg/node:20  # o la versión que uses
+      - image: cimg/node:20.11.0  # o la versión que uses
       - image: postgres:15
         name: db
         environment:
