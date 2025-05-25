@@ -42,8 +42,6 @@ async function bootstrap() {
     SwaggerModule.setup('api', app, document);
   }
 
-  const bool = true
-
   await app.listen(port);
 }
 bootstrap();
