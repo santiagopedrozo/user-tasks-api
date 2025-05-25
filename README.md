@@ -24,9 +24,7 @@
 - Typescript was used because static type checks help a lot by preventing some bugs.
 
 ### Badges
-
-[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/DVoiAwDzmMcvshPZnm3jCP/ASAErrsAbrCMQahxbmgeyR/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/DVoiAwDzmMcvshPZnm3jCP/ASAErrsAbrCMQahxbmgeyR/tree/master)
-[![Coverage Status](https://coveralls.io/repos/github/yaritaft/cosmos-challenge/badge.png?branch=master)](https://coveralls.io/github/yaritaft/cosmos-challenge?branch=master)
+[![CircleCI](https://circleci.com/gh/santiagopedrozo/user-tasks-api.svg?style=svg)](https://circleci.com/gh/santiagopedrozo/user-tasks-api)
 
 ### Features
 
