@@ -1,59 +1,20 @@
 version: 2.1
-orbs:
-  node: circleci/node@5.0.2
-  heroku: circleci/heroku@1.2.6
 
 jobs:
-  e2e_tests:
+  test:
     docker:
-      - image: cimg/node:20.11.0  # o la versión que uses
-      - image: postgres:15
-        name: db
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: users_task_test
-    environment:
-      DB_HOST: 127.0.0.1
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-      DB_DATABASE: users_task_test
-      ENV: TEST
-      REDIS_ENABLED: false
-      ENABLE_SWAGGER: false
-      JWT_ACCESS_SECRET: ACCESS_SECRET
-      JWT_REFRESH_SECRET: REFRESH_SECRET
-      JWT_ACCESS_EXPIRES_IN: 15m
-      JWT_REFRESH_EXPIRES_IN: 1s
+      - image: cimg/base:stable  # o cualquier imagen básica con docker y docker-compose instalados
     steps:
       - checkout
-
-      - node/install-packages:
-          pkg-manager: npm
-
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Wait for Postgres to be ready
+          name: Run docker-compose test
           command: |
-            for i in `seq 1 10`; do
-              nc -z 127.0.0.1 5432 && echo "Postgres is up" && exit 0
-              echo "Waiting for postgres..."
-              sleep 3
-            done
-            echo "Postgres did not start in time" && exit 1
-
-      - run:
-          name: Run DB Migrations
-          command: npm run migration:run
-
-      - run:
-          name: Run E2E tests
-          command: npm run test:e2e
+            docker-compose -f docker-compose-test.yml up --abort-on-container-exit --build
 
 workflows:
-  test_my_app:
+  version: 2
+  test_workflow:
     jobs:
-      - e2e_tests
-      #- run-linters #on push
-      #- build #on push
-      #- e2e-test #after pr main
+      - test
