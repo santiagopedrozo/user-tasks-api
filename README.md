@@ -7,7 +7,7 @@
 
 ### Decisions taken
 
-- Service, Repository and client were created to split business logic from storage (Even when the storage is another API)
+- Service, Repository and client were created to split business logic from storage (Even when the storage is another API).
 - Added an extra abstract layer to Client of external tasks to change easily the API if needed.
 - Used clean architecture by splitting outside communication from app domain. And the app domains is splitted into controller, service, repository and client. This makes the application easy to extend and modify without having to affect further functionalities.
 - All the domain errors are mapped by a http error mapper to avoid http implementations on the service, also implemented a global exception filter to avoid unhandled rejects
@@ -40,7 +40,6 @@
 - [PreRequisites](#Pre-requisites)
 - [Run APP](#Run-APP)
 - [Run tests](#Run-tests)
-
 
 
 ## Technology
