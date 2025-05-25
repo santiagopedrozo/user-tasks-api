@@ -18,7 +18,7 @@ import { jwtModuleFactory } from '../shared/config/module-factories/jwt-module.f
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: jwtModuleFactory,
-    })
+    }),
   ],
   providers: [AuthService, JwtStrategy, RefreshTokenStrategy],
   controllers: [AuthController],

@@ -1,10 +1,10 @@
 import { DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-require('dotenv').config();
+import 'dotenv/config';
 
 const isCompiled = __dirname.includes('dist');
 
-export const connectionOptions: PostgresConnectionOptions  = {
+export const connectionOptions: PostgresConnectionOptions = {
   type: 'postgres',
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT || '5432', 10),
@@ -18,5 +18,3 @@ export const connectionOptions: PostgresConnectionOptions  = {
 export default new DataSource({
   ...connectionOptions,
 });
-
-

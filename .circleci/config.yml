@@ -1,0 +1,81 @@
+version: 2.1
+
+executors:
+  node:
+    docker:
+      - image: cimg/node:18.17
+    working_directory: ~/repo
+
+jobs:
+  install:
+    executor: node
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+            - .
+
+  lint:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Run ESLint
+          command: npm run lint
+
+  typecheck:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: TypeScript type check
+          command: npx tsc --noEmit
+
+  build:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Build project
+          command: npm run build
+
+  test-e2e:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Run E2E tests
+          command: docker-compose -f docker-compose-test.yml up --abort-on-container-exit --build
+      - store_artifacts:
+          path: coverage
+          destination: e2e-coverage
+
+workflows:
+  version: 2
+  ci_pipeline:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - typecheck:
+          requires:
+            - install
+      - build:
+          requires:
+            - lint
+            - typecheck
+      - test-e2e:
+          requires:
+            - install

@@ -6,18 +6,20 @@ import { Injectable } from '@nestjs/common';
 import { ITaskClient } from './task-client.interface';
 
 @Injectable()
-export class TypicodeTaskClient implements ITaskClient{
+export class TypicodeTaskClient implements ITaskClient {
   constructor(
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {}
 
-  private url = this.configService.get<string>('URL_TYPICODE_PLACEHOLDER_API') || 'undefined';
+  private url =
+    this.configService.get<string>('URL_TYPICODE_PLACEHOLDER_API') ||
+    'undefined';
 
   async findAll(): Promise<ExternalTaskDto[]> {
-    const response$ = this.httpService.get(`${this.url}/todos`).pipe(
-      map(response => response?.data?.map(this.mapToDto))
-    );
+    const response$ = this.httpService
+      .get(`${this.url}/todos`)
+      .pipe(map((response) => response?.data?.map(this.mapToDto)));
 
     return firstValueFrom(response$);
   }

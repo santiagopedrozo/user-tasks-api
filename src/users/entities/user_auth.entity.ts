@@ -20,7 +20,7 @@ export class UserAuth {
 
   @OneToOne(() => User)
   @JoinColumn()
-  user: User
+  user: User;
 
   @Column({ nullable: true })
   hashedRefreshToken?: string;

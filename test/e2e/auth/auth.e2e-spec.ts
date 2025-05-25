@@ -36,7 +36,9 @@ describe('Auth E2E - Full Test Suite', () => {
   afterEach(async () => {
     await dataSource.query(`TRUNCATE TABLE "tasks" RESTART IDENTITY CASCADE`);
     await dataSource.query(`TRUNCATE TABLE "users" RESTART IDENTITY CASCADE`);
-    await dataSource.query(`TRUNCATE TABLE "user_auth" RESTART IDENTITY CASCADE`);
+    await dataSource.query(
+      `TRUNCATE TABLE "user_auth" RESTART IDENTITY CASCADE`,
+    );
   });
 
   afterAll(async () => {
@@ -47,7 +49,7 @@ describe('Auth E2E - Full Test Suite', () => {
     it('should return role admin user on first user created and user role on second user', async () => {
       const adminResult = await request(app.getHttpServer())
         .post('/auth/register')
-        .send({username: 'admin', password: 'password'});
+        .send({ username: 'admin', password: 'password' });
 
       expect(adminResult.status).toBe(201);
       expect(adminResult.body).toHaveProperty('id');
@@ -57,26 +59,25 @@ describe('Auth E2E - Full Test Suite', () => {
 
       const userResult = await request(app.getHttpServer())
         .post('/auth/register')
-        .send({username: 'user', password: 'password'});
+        .send({ username: 'user', password: 'password' });
 
       expect(userResult.status).toBe(201);
       expect(userResult.body).toHaveProperty('id');
       expect(userResult.body).toHaveProperty('username');
       expect(userResult.body).toHaveProperty('role');
       expect(userResult.body.role).toBe(UserRole.USER);
-
     });
 
     it('should return 409 if user already exists', async () => {
       const adminResult = await request(app.getHttpServer())
         .post('/auth/register')
-        .send({username: 'admin', password: 'password'});
+        .send({ username: 'admin', password: 'password' });
 
       expect(adminResult.status).toBe(201);
 
       const userResult = await request(app.getHttpServer())
         .post('/auth/register')
-        .send({username: 'admin', password: 'password1223'});
+        .send({ username: 'admin', password: 'password1223' });
 
       expect(userResult.status).toBe(409);
     });
@@ -84,7 +85,7 @@ describe('Auth E2E - Full Test Suite', () => {
 
   describe('POST /auth/login', () => {
     it('should return access and refresh token for valid credentials', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -108,7 +109,7 @@ describe('Auth E2E - Full Test Suite', () => {
     });
 
     it('should return a new refresh token on each login', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -129,7 +130,7 @@ describe('Auth E2E - Full Test Suite', () => {
 
   describe('POST /auth/refresh', () => {
     it('should login and refresh token successfully', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -153,7 +154,7 @@ describe('Auth E2E - Full Test Suite', () => {
     });
 
     it('should return 401 with an invalid/malformed refresh token', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -184,7 +185,7 @@ describe('Auth E2E - Full Test Suite', () => {
     });
 
     it('should return 401 for expired refresh token', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -204,7 +205,7 @@ describe('Auth E2E - Full Test Suite', () => {
     });
 
     it('should reject a refresh token that was already rotated', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 

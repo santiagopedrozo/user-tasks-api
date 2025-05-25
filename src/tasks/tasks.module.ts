@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TasksService } from './services/tasks.service';
+import { TasksService } from './tasks.service';
 import { TasksController } from './tasks.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Task } from './entities/task.entity';
@@ -19,7 +19,13 @@ import { ConfigModule } from '@nestjs/config';
       useClass: TypicodeTaskClient,
     },
   ],
-  imports: [ConfigModule, UsersModule, HttpModule, TypeOrmModule.forFeature([Task]), EventEmitterModule.forRoot()],
-  exports: [TasksService]
+  imports: [
+    ConfigModule,
+    UsersModule,
+    HttpModule,
+    TypeOrmModule.forFeature([Task]),
+    EventEmitterModule.forRoot(),
+  ],
+  exports: [TasksService],
 })
 export class TasksModule {}

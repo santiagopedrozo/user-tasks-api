@@ -1,21 +1,18 @@
-import {
-  Inject,
-  Injectable, Logger,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Task } from '../entities/task.entity';
-import { CreateTaskDto } from '../dtos/create-task.dto';
-import { UpdateTaskDto } from '../dtos/update-task.dto';
-import { ExternalTaskDto } from '../dtos/external-task.dto';
+import { Task } from './entities/task.entity';
+import { CreateTaskDto } from './dtos/create-task.dto';
+import { UpdateTaskDto } from './dtos/update-task.dto';
+import { ExternalTaskDto } from './dtos/external-task.dto';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { PaginationQueryDto } from '../../shared/dtos/pagination-query.dto';
-import { User, UserRole } from '../../users/entities/user.entity';
-import { ForbiddenTaskAccessException } from '../errors/forbidden-access.exception';
-import { TaskNotFoundException } from '../errors/task-not-found.exception';
-import { UsersService } from '../../users/users.service';
-import { ITaskClient, ITaskClientName } from '../clients/task-client.interface';
-import { SyncTasksResponseDto } from '../dtos/sync-tasks-response.dto';
+import { PaginationQueryDto } from '../shared/dtos/pagination-query.dto';
+import { User, UserRole } from '../users/entities/user.entity';
+import { ForbiddenTaskAccessException } from './errors/forbidden-access.exception';
+import { TaskNotFoundException } from './errors/task-not-found.exception';
+import { UsersService } from '../users/users.service';
+import { ITaskClient, ITaskClientName } from './clients/task-client.interface';
+import { SyncTasksResponseDto } from './dtos/sync-tasks-response.dto';
 import { ConfigService } from '@nestjs/config';
 
 export type RequestingUser = Pick<User, 'id' | 'role'>;
@@ -84,7 +81,7 @@ export class TasksService {
       order: {
         createdAt: 'DESC',
       },
-      cache: this.configService.get<number>('CACHE_TTL_MS') || 300000
+      cache: this.configService.get<number>('CACHE_TTL_MS') || 300000,
     });
 
     return {
@@ -111,15 +108,16 @@ export class TasksService {
   }
 
   async syncExternalTasks(): Promise<SyncTasksResponseDto> {
-    const externalTasks= await this.getExternalTasks();
+    const externalTasks = await this.getExternalTasks();
 
     //move to batches to increase performance
     let syncedTasks = 0;
     for (const externalTask of externalTasks) {
+      const userExists = await this.userService.findOne({
+        id: externalTask.userId,
+      });
 
-      const userExists = await this.userService.findOne({ id: externalTask.userId });
-
-      if(userExists){
+      if (userExists) {
         const taskExists = await this.tasksRepo.findOne({
           where: {
             title: externalTask.title,

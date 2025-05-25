@@ -15,16 +15,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: users_task_test
-  redis-test:
-    image: redis:3
-    restart: always
-    healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
-      interval: 2s
-      timeout: 5s
-      retries: 10
-    ports:
-      - "6379:6379"
   api-test:
     build:
       context: .
@@ -32,8 +22,6 @@ services:
       - "3000:3000"
     depends_on:
       db-test:
-        condition: service_healthy
-      redis-test:
         condition: service_healthy
     environment:
       PORT: 3000
@@ -47,7 +35,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_DATABASE: users_task_test
-      REDIS_URL: redis://redis:6379
       ENV: TEST
-      CACHE_TTL_MS: 300000
+      REDIS_ENABLED: false
+      ENABLE_SWAGGER: false
     command: sh -c "npm run migration:run && npm run test:cov"
