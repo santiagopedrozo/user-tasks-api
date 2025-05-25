@@ -1,6 +1,6 @@
 import { CreateTaskDto } from './create-task.dto';
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNotEmpty, IsUUID } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class UpdateTaskDto extends PartialType(CreateTaskDto) {
   @ApiProperty({

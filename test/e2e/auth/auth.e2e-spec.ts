@@ -85,7 +85,7 @@ describe('Auth E2E - Full Test Suite', () => {
 
   describe('POST /auth/login', () => {
     it('should return access and refresh token for valid credentials', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -109,7 +109,7 @@ describe('Auth E2E - Full Test Suite', () => {
     });
 
     it('should return a new refresh token on each login', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -130,7 +130,7 @@ describe('Auth E2E - Full Test Suite', () => {
 
   describe('POST /auth/refresh', () => {
     it('should login and refresh token successfully', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -154,7 +154,7 @@ describe('Auth E2E - Full Test Suite', () => {
     });
 
     it('should return 401 with an invalid/malformed refresh token', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -185,7 +185,7 @@ describe('Auth E2E - Full Test Suite', () => {
     });
 
     it('should return 401 for expired refresh token', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 
@@ -205,7 +205,7 @@ describe('Auth E2E - Full Test Suite', () => {
     });
 
     it('should reject a refresh token that was already rotated', async () => {
-      const userRegister = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/register')
         .send({ username: 'user1', password: 'password' });
 

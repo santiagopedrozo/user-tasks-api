@@ -39,3 +39,6 @@ services:
       REDIS_ENABLED: false
       ENABLE_SWAGGER: false
     command: sh -c "npm run migration:run && npm run test:cov"
+    volumes:
+      - .:/app
+      - ./coverage:/app/coverage
