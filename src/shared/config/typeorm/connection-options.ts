@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-//require('dotenv').config();
-import 'dotenv/config';
+require('dotenv').config();
 
 const isCompiled = __dirname.includes('dist');
 
