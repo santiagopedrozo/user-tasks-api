@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: cimg/base:stable  # o cualquier imagen básica con docker y docker-compose instalados
+      - image: cimg/base:stable
     steps:
       - checkout
       - setup_remote_docker:

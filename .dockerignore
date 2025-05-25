@@ -3,3 +3,7 @@ dist
 .git
 *.log
 .env
+
+data/
+up_dev.sh
+up_test.sh
