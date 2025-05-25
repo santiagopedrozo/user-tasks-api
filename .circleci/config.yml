@@ -47,7 +47,7 @@ jobs:
           name: Build project
           command: npm run build
 
-  test:e2e:
+  test-e2e:
     docker:
       - image: cimg/base:stable
     steps:
@@ -76,6 +76,6 @@ workflows:
           requires:
             - lint
             - typecheck
-      - test:e2e:
+      - test-e2e:
           requires:
             - install
