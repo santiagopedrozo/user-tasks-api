@@ -38,5 +38,5 @@ services:
       ENV: TEST
       REDIS_ENABLED: false
       ENABLE_SWAGGER: false
-      COVERALLS_REPO_TOKEN: ${COVERALLS_REPO_TOKEN}
+      COVERALLS_REPO_TOKEN: nPX6Bgb2qLPNYSui3b1I12RCf8Z4Glkuh
     command: sh -c "npm run migration:run && npm run test:cov"
