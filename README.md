@@ -1,5 +1,10 @@
 # User tasks challenge
 
+### Badges
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/WHSMgy394bmpxbuxPs3Xpa/CbDH9157LcvoG7mRJh28vH/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/WHSMgy394bmpxbuxPs3Xpa/CbDH9157LcvoG7mRJh28vH/tree/master)
+[![Coverage Status](https://coveralls.io/repos/github/santiagopedrozo/user-tasks-api/badge.svg?branch=coveralls-integration-v2)](https://coveralls.io/github/santiagopedrozo/user-tasks-api?branch=coveralls-integration-v2)
+
+
 #### Things that can be done to improve:
 1. All the unit and integration test are skipped and must be resolved in the future, the critics endpoints of business logic are covered with e2e
 2. The redis implementation is only used to satisfy the sql queries cache, the implementation should be abstracted to another layer to make it easier to use if any new features needs redis as well
@@ -23,8 +28,6 @@
 - Nest was chosen because it has a very nice approach to apply clean architecture out of the box by fostering dependency inversion principle with modules.
 - Typescript was used because static type checks help a lot by preventing some bugs.
 
-### Badges
-[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/WHSMgy394bmpxbuxPs3Xpa/CbDH9157LcvoG7mRJh28vH/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/WHSMgy394bmpxbuxPs3Xpa/CbDH9157LcvoG7mRJh28vH/tree/master)
 ### Features
 
 - [] Register a new `user`, then login and start adding tasks.
