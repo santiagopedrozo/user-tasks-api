@@ -24,8 +24,7 @@
 - Typescript was used because static type checks help a lot by preventing some bugs.
 
 ### Badges
-[![CircleCI](https://circleci.com/gh/santiagopedrozo/user-tasks-api.svg?style=svg)](https://circleci.com/gh/santiagopedrozo/user-tasks-api)
-
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/WHSMgy394bmpxbuxPs3Xpa/CbDH9157LcvoG7mRJh28vH/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/WHSMgy394bmpxbuxPs3Xpa/CbDH9157LcvoG7mRJh28vH/tree/master)
 ### Features
 
 - [] Register a new `user`, then login and start adding tasks.

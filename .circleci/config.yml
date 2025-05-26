@@ -1,9 +1,5 @@
 version: 2.1
 
-orbs:
-  coveralls: coveralls/coveralls@2.2.5
-
-
 executors:
   node:
     docker:
@@ -64,10 +60,6 @@ jobs:
       - store_artifacts:
           path: coverage
           destination: e2e-coverage
-      - coveralls/upload:
-          parallel: true
-          flag_name: Test 1
-          verbose: true
 
 workflows:
   version: 2
