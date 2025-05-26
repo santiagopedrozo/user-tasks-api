@@ -9,6 +9,7 @@
 1. All the unit and integration test are skipped and must be resolved in the future, the critics endpoints of business logic are covered with e2e
 2. The redis implementation is only used to satisfy the sql queries cache, the implementation should be abstracted to another layer to make it easier to use if any new features needs redis as well
 3. The sync implementation for the tasks API is optimized for low-volume operations (e.g., around 2,000 records). For larger datasets, this solution is not well-suited, and more robust strategies such as batching or connection pooling will be necessary
+4. The test implementation needs refinement: the Coveralls integration is not fully complete, and the auth tests are flaky.
 
 ### Decisions taken
 
@@ -54,7 +55,7 @@
 ## Routes
 
 - API swagger: http://localhost:3000/api#/
-- 
+
 ## Pre-requisites
 
 - Docker and docker compose installed.
